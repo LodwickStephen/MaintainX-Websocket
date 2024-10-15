@@ -1,26 +1,12 @@
 const axios = require('axios');
 const { getAuthHeaders } = require('../utils/auth');
 
-// Fetch work orders that need due dates to be set based on priority
-const getNewWorkOrders = async () => {
-    const url = `${process.env.API_BASE_URL}/workorders`; // Adjust this according to the MaintainX API endpoint
-    const headers = getAuthHeaders();
-    
-    try {
-        const response = await axios.get(url, { headers });
-        return response.data; // Return work orders data
-    } catch (error) {
-        console.error(`Failed to fetch work orders: ${error.message}`);
-        throw error;
-    }
-};
-
 // Calculate due date based on priority
 const calculateDueDate = (priority) => {
     const now = new Date();
     let dueDate;
 
-    switch (priority) {
+    switch (priority.toUpperCase()) {
         case 'HIGH':
             dueDate = new Date(now.setDate(now.getDate() + 1)); // 1 day from now
             break;
@@ -53,71 +39,19 @@ const updateWorkOrderDueDate = async (workOrderId, dueDate) => {
     }
 };
 
-// Add a comment to a work order
-const addCommentToWorkOrder = async (workOrderId, comment) => {
-    const url = `${process.env.API_BASE_URL}/workorders/${workOrderId}/comments`;
-    const headers = getAuthHeaders();
+// Process a single work order
+const processWorkOrders = async (workOrder) => {
+    const { id, priority, dueDate } = workOrder;
 
-    const payload = {
-        content: comment
-    };
-
-    try {
-        const response = await axios.post(url, payload, { headers });
-        console.log(`Comment added to work order ${workOrderId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Failed to add comment to work order: ${error.message}`);
-        throw error;
-    }
-};
-
-// Add a cost to a work order
-const addCostToWorkOrder = async (workOrderId, cost) => {
-    const url = `${process.env.API_BASE_URL}/workorders/${workOrderId}/costs`;
-    const headers = getAuthHeaders();
-
-    const payload = {
-        type: "EXPENSE",        // Always "EXPENSE" as per documentation
-        costType: cost.costType, // Example: "LABOR", "OTHER", "TRAVEL"
-        costPerUnit: cost.costPerUnit, // Cost per unit in cents
-        description: cost.description || null // Optional description
-    };
-
-    try {
-        const response = await axios.post(url, payload, { headers });
-        console.log(`Cost added to work order ${workOrderId}`);
-        return response.data;
-    } catch (error) {
-        console.error(`Failed to add cost to work order: ${error.message}`);
-        throw error;
-    }
-};
-
-// Main function to process work orders
-const processWorkOrders = async () => {
-    const workOrders = await getNewWorkOrders();
-
-    for (const workOrder of workOrders) {
-        const { id, priority, dueDate } = workOrder;
-
-        // If work order doesn't already have a due date
-        if (!dueDate) {
-            const calculatedDueDate = calculateDueDate(priority);
-            
-            if (calculatedDueDate) {
-                await updateWorkOrderDueDate(id, calculatedDueDate);
-            } else {
-                console.log(`No due date set for work order ${id} with priority ${priority}`);
-            }
+    // If work order doesn't already have a due date
+    if (!dueDate) {
+        const calculatedDueDate = calculateDueDate(priority);
+        
+        if (calculatedDueDate) {
+            await updateWorkOrderDueDate(id, calculatedDueDate);
+        } else {
+            console.log(`No due date set for work order ${id} with priority ${priority}`);
         }
-
-        // Optionally add a comment
-        await addCommentToWorkOrder(id, `Due date set based on priority: ${priority}`);
-
-        // Optionally add a cost (if applicable)
-        const cost = { costType: 'LABOR', costPerUnit: 1000, description: 'Initial cost' };
-        await addCostToWorkOrder(id, cost);
     }
 };
 
