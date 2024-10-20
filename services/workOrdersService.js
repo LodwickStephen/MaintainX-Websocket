@@ -40,19 +40,33 @@ const updateWorkOrderDueDate = async (workOrderId, dueDate) => {
 };
 
 // Process a single work order
-const processWorkOrders = async (workOrder) => {
-    const { id, priority, dueDate } = workOrder;
+const processWorkOrders = async (workOrderId, newWorkOrder) => {
+    const { priority, dueDate } = newWorkOrder;
 
     // If work order doesn't already have a due date
     if (!dueDate) {
         const calculatedDueDate = calculateDueDate(priority);
         
         if (calculatedDueDate) {
-            await updateWorkOrderDueDate(id, calculatedDueDate);
+            await updateWorkOrderDueDate(workOrderId, calculatedDueDate);
         } else {
-            console.log(`No due date set for work order ${id} with priority ${priority}`);
+            console.log(`No due date set for work order ${workOrderId} with priority ${priority}`);
         }
     }
 };
 
-module.exports = { processWorkOrders };
+// Update work order if priority has changed
+const updateWorkOrderIfPriorityChanged = async (workOrderId, newWorkOrder) => {
+    const { priority, dueDate } = newWorkOrder;
+
+    // Calculate new due date based on the updated priority
+    const newCalculatedDueDate = calculateDueDate(priority);
+
+    if (newCalculatedDueDate && dueDate !== newCalculatedDueDate) {
+        await updateWorkOrderDueDate(workOrderId, newCalculatedDueDate);
+    }else {
+        console.log(` ${workOrderId} with priority ${priority} has the correct due date`);
+    }
+};
+
+module.exports = { processWorkOrders, updateWorkOrderIfPriorityChanged };

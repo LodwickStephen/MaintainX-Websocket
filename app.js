@@ -10,6 +10,9 @@ app.use(bodyParser.json());
 // Webhook endpoint for new work orders
 app.post('/webhook/new-work-order', webhookController.newWorkOrderWebhook);
 
+// Webhook endpoint for work order changes
+app.post('/webhook/work-order-change', webhookController.workOrderChangeWebhook);
+
 // Start the server on HTTP
 const PORT = process.env.PORT || 80;
 app.listen(PORT, () => {
