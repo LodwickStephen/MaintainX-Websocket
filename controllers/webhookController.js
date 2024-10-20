@@ -1,4 +1,4 @@
-const { validateWebhookSignature } = require('./webhookValidator'); // Adjust the path as necessary
+const { validateWebhookSignature } = require('../utils/webhookValidator');
 const { processWorkOrders, updateWorkOrderIfPriorityChanged  } = require('./workOrdersService'); 
 
 // Webhook listener for new work orders
