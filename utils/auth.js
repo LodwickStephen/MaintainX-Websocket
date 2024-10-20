@@ -1,9 +1,8 @@
 const getAuthHeaders = () => {
     const token = process.env.BEARER_TOKEN;
-    const orgId = process.env.ORGANIZATION_ID;
 
-    if (!token || !orgId) {
-        throw new Error('Bearer token or organization ID is not set');
+    if (!token) {
+        throw new Error('Bearer token is not set');
     }
 
     return {

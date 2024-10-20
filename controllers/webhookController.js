@@ -1,5 +1,5 @@
 const { validateWebhookSignature } = require('../utils/webhookValidator');
-const { processWorkOrders, updateWorkOrderIfPriorityChanged  } = require('./workOrdersService'); 
+const { processWorkOrders, updateWorkOrderIfPriorityChanged  } = require('../services/workOrdersService'); 
 
 // Webhook listener for new work orders
 const newWorkOrderWebhook = async (req, res) => {
