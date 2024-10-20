@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const config = require('../config/config');
+
 
 // Validate the MaintainX webhook signature
 function validateWebhookSignature(headers, body, fullUri, secret) {
