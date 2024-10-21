@@ -11,14 +11,15 @@ const newWorkOrderWebhook = async (req, res) => {
     const fullUri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     console.log('Full URI:', fullUri); // Log the constructed full URI
 
-    const hardcodedUri = 'ec2-18-216-38-243.us-east-2.compute.amazonaws.com/webhook/new-work-order';
+    //const hardcodedUri = 'ec2-18-216-38-243.us-east-2.compute.amazonaws.com/webhook/new-work-order';
 
     // Step 1: Validate the webhook signatures
     const isValidSignature = validateWebhookSignature(
         req.headers,
         req.body,
         //fullUri, 
-        hardcodedUri,
+        //hardcodedUri,
+        fullUri,
         process.env.MAINTAINX_NEW_WORK_ORDER_WEBHOOK_SECRET // Use new work order secret
     );
 
