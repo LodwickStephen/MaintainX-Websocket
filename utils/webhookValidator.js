@@ -36,6 +36,11 @@ function validateSignature(signatureHeader, data, secret) {
     .update(signedPayload, 'utf8')
     .digest('hex');
 
+    console.log(`Timestamp: ${timestamp}`);
+    console.log(`Received Signature: ${receivedSignature}`);
+    console.log(`Expected Signature: ${expectedSignature}`);
+    console.log(`Signed Payload: ${signedPayload}`);
+
  // Compare the received signature to the expected signature
  const signatureMatches = receivedSignature === expectedSignature;
 
@@ -45,6 +50,9 @@ function validateSignature(signatureHeader, data, secret) {
  const timeDifference = Math.abs(currentTime - receivedTime);
 
  const tolerance = 5 * 60; // 5 minutes in seconds
+
+ console.log(`Time Difference: ${timeDifference} seconds`);
+
 
  return signatureMatches && timeDifference <= tolerance;
 
