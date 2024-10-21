@@ -11,7 +11,7 @@ const newWorkOrderWebhook = async (req, res) => {
     const fullUri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     console.log('Full URI:', fullUri); // Log the constructed full URI
 
-    const hardcodedUri = 'http://ec2-18-216-38-243.us-east-2.compute.amazonaws.com/webhook/new-work-order';
+    const hardcodedUri = 'ec2-18-216-38-243.us-east-2.compute.amazonaws.com/webhook/new-work-order';
 
     // Step 1: Validate the webhook signatures
     const isValidSignature = validateWebhookSignature(
