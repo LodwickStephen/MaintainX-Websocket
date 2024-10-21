@@ -3,15 +3,15 @@ const { processWorkOrders, updateWorkOrderIfPriorityChanged  } = require('../ser
 
 // Webhook listener for new work orders
 const newWorkOrderWebhook = async (req, res) => {
-    console.log('Webhook hit:', req.body); // Log when the webhook is hit
-    console.log('Headers:', req.headers);
-
     
+    //construct full URI for webhook validation
+    const fullUri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
     // Step 1: Validate the webhook signatures
     const isValidSignature = validateWebhookSignature(
         req.headers,
         req.body,
-        req.originalUrl,
+        fullUri, 
         process.env.MAINTAINX_NEW_WORK_ORDER_WEBHOOK_SECRET // Use new work order secret
     );
 
@@ -42,10 +42,14 @@ const newWorkOrderWebhook = async (req, res) => {
 // Webhook listener for work order changes
 const workOrderChangeWebhook = async (req, res) => {
     // Step 1: Validate the webhook signatures
+
+       //construct full URI for webhook validation
+    const fullUri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+
     const isValidSignature = validateWebhookSignature(
         req.headers,
         req.body,
-        req.originalUrl,
+        fullUri,
         process.env.MAINTAINX_WORK_ORDER_CHANGE_WEBHOOK_SECRET // Use work order change secret
     );
 
