@@ -13,8 +13,16 @@ app.post('/webhook/new-work-order', webhookController.newWorkOrderWebhook);
 // Webhook endpoint for work order changes
 app.post('/webhook/work-order-change', webhookController.workOrderChangeWebhook);
 
+app.post('/test-webhook', (req, res) => {
+    console.log('Test webhook hit:', req.body);
+    res.send('Test webhook received');
+});
+
+console.log('Setting up webhook routes');
+
+
 // Start the server on HTTP
-const PORT = process.env.PORT || 80;
+const PORT = 80;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

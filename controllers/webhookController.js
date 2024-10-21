@@ -3,6 +3,10 @@ const { processWorkOrders, updateWorkOrderIfPriorityChanged  } = require('../ser
 
 // Webhook listener for new work orders
 const newWorkOrderWebhook = async (req, res) => {
+    console.log('Webhook hit:', req.body); // Log when the webhook is hit
+    console.log('Headers:', req.headers);
+
+    
     // Step 1: Validate the webhook signatures
     const isValidSignature = validateWebhookSignature(
         req.headers,
