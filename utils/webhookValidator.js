@@ -12,6 +12,7 @@ function validateWebhookSignature(headers, body, fullUri, secret) {
     const isValidUriSignature = validateSignature(uriSignature, fullUri, secret);
 
     //Both signatures must be valid
+    return isValidBodySignature
     return isValidBodySignature && isValidUriSignature;
 }
 
