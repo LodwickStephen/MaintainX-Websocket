@@ -29,11 +29,6 @@ const newWorkOrderWebhook = async (req, res) => {
     // Step 2: Extract work order data from the webhook body
     const { newWorkOrder, workOrderId } = req.body; 
 
-    if (!newWorkOrder) {
-        console.error('Invalid data: newWorkOrder is missing');
-        return res.status(400).send('Invalid data');
-    }
-
     try {
         // Process the new work order based on its priority
         await processWorkOrders(workOrderId, newWorkOrder);  // Call the function to calculate due date based on priority
@@ -66,12 +61,7 @@ const workOrderChangeWebhook = async (req, res) => {
 
     // Step 2: Extract work order change data from the webhook body
     const { newWorkOrder, workOrderId } = req.body;
-
-    if (!newWorkOrder) {
-        console.error('Invalid data: newWorkOrder is missing');
-        return res.status(400).send('Invalid data');
-    }
-
+    
     try {
         // Check if the priority has changed and update the due date if necessary
         await updateWorkOrderIfPriorityChanged(workOrderId, newWorkOrder);
