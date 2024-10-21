@@ -39,7 +39,7 @@ const updateWorkOrderDueDate = async (workOrderId, dueDate) => {
     }
 };
 
-// Process a single work order
+// Process a work order
 const processWorkOrders = async (workOrderId, newWorkOrder) => {
     const { priority, dueDate } = newWorkOrder;
 

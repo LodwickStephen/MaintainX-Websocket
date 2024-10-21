@@ -11,8 +11,6 @@ const newWorkOrderWebhook = async (req, res) => {
     const fullUri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     console.log('Full URI:', fullUri); // Log the constructed full URI
 
-    //const hardcodedUri = 'ec2-18-216-38-243.us-east-2.compute.amazonaws.com/webhook/new-work-order';
-
     // Step 1: Validate the webhook signatures
     const isValidSignature = validateWebhookSignature(
         req.headers,
@@ -30,8 +28,7 @@ const newWorkOrderWebhook = async (req, res) => {
     const { newWorkOrder, workOrderId } = req.body; 
 
     try {
-        // Process the new work order based on its priority
-        await processWorkOrders(workOrderId, newWorkOrder);  // Call the function to calculate due date based on priority
+        await processWorkOrders(workOrderId, newWorkOrder);  // process workorder to calculate due date based on priority
         res.status(200).send('New work order due date set successfully');
     } catch (error) {
         console.error('Error processing work order:', error);
@@ -58,12 +55,17 @@ const workOrderChangeWebhook = async (req, res) => {
         console.error('Invalid webhook signature or timestamp out of tolerance');
         return res.status(400).send('Invalid webhook signature or timestamp out of tolerance');
     }
+    // Check if newWorkOrder is missing or null
+    if (!newWorkOrder) {
+        console.error('Invalid data: newWorkOrder is missing');
+        return res.status(400).send('Invalid data');
+    }
 
     // Step 2: Extract work order change data from the webhook body
     const { newWorkOrder, workOrderId } = req.body;
-    
+
     try {
-        // Check if the priority has changed and update the due date if necessary
+        // Check the changed priority and update the due date if necessary
         await updateWorkOrderIfPriorityChanged(workOrderId, newWorkOrder);
         res.status(200).send('Due date changed successfully');
     } catch (error) {
