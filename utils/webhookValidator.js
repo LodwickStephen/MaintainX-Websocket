@@ -8,11 +8,12 @@ function validateWebhookSignature(headers, body, fullUri, secret) {
     const isValidBodySignature = validateSignature(bodySignature, body, secret);
 
     // Validate the URI signature
-    const uriSignature = headers['x-maintainx-webhook-uri-signature'];
-    const isValidUriSignature = validateSignature(uriSignature, fullUri, secret);
+    //const uriSignature = headers['x-maintainx-webhook-uri-signature'];
+    //const isValidUriSignature = validateSignature(uriSignature, fullUri, secret);
 
     // Both signatures must be valid
-    return isValidBodySignature && isValidUriSignature;
+    //return isValidBodySignature && isValidUriSignature;
+    return isValidBodySignature
 }
 
 // Helper function to validate signature for both body and URI

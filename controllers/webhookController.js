@@ -17,8 +17,6 @@ const newWorkOrderWebhook = async (req, res) => {
     const isValidSignature = validateWebhookSignature(
         req.headers,
         req.body,
-        //fullUri, 
-        //hardcodedUri,
         fullUri,
         process.env.MAINTAINX_NEW_WORK_ORDER_WEBHOOK_SECRET // Use new work order secret
     );
