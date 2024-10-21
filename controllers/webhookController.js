@@ -55,17 +55,18 @@ const workOrderChangeWebhook = async (req, res) => {
         console.error('Invalid webhook signature or timestamp out of tolerance');
         return res.status(400).send('Invalid webhook signature or timestamp out of tolerance');
     }
+
+
     // Check if newWorkOrder is missing or null
+    const { newWorkOrder, workOrderId } = req.body;
     if (!newWorkOrder) {
         console.error('Invalid data: newWorkOrder is missing');
         return res.status(400).send('Invalid data');
     }
 
-    // Step 2: Extract work order change data from the webhook body
-    const { newWorkOrder, workOrderId } = req.body;
-
+    // Step 2: Check the changed priority and update the due date if necessary
+ 
     try {
-        // Check the changed priority and update the due date if necessary
         await updateWorkOrderIfPriorityChanged(workOrderId, newWorkOrder);
         res.status(200).send('Due date changed successfully');
     } catch (error) {
